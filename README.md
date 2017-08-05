@@ -22,28 +22,32 @@ resource "aws_ebs_volume" "test" {
   tags {
       Name = "${var.test_tags[count.index]}"
   }
-}```
+}
+```
 
 This will create three EBS volumes with the name tags ebs1, ebs2, and ebs3 and is a very cool feature in terraform.  This allows you to easily create some automation scripts to build a lot of resources.  In the terraform state file, they will be listed as "aws_ebs_volume.test.0", "aws_ebs_volume.test.1", "aws_ebs_volume.test.2".  The issue is that if in the future you decide that you no longer need ebs2.  For clarity, here is the current mapping in our example:
 
 ```Volume to state resource
 ebs1 = "aws_ebs_volume.test.0"
 ebs2 = "aws_ebs_volume.test.1"
-ebs3 = "aws_ebs_volume.test.2"```
+ebs3 = "aws_ebs_volume.test.2"
+```
 
 If you remove ebs2 from the array, then ebs3 will shift into ebs2's place in the array.  This will cause terraform to see the following when you run terraform plan:
 
 ```Volume to state resource
 ebs1 = "aws_ebs_volume.test.0"
 ebs3 = "aws_ebs_volume.test.1" (rename ebs2 tag to ebs3)
-nothing = "aws_ebs_volume.test.2" (delete ebs3)```
+nothing = "aws_ebs_volume.test.2" (delete ebs3)
+```
 
 Here's the actual terraform plan for this:
 
 ```~ aws_ebs_volume.test.1
     tags.Name: "ebs2" => "ebs3"
 
-- aws_ebs_volume.test.2```
+- aws_ebs_volume.test.2
+```
 
 So while we wanted to remove ebs2, terraform will actually delete ebs3 and rename ebs2 to ebs3.  This issue is further complicated by the fact that there is no way to edit the state file for counters with the terraform state command.  It won't take in commands with the designation like "aws_ebs_volume.test.0".  This isn't a huge deal with ebs volumes and tags, but if it were instances and AMIs, all your systems from that item forward would likely be rebuild in the wash.
 
