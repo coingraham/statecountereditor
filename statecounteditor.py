@@ -17,6 +17,9 @@ class StateCounterHelper:
 
     def main(self):
 
+        # Opening statements
+        print "Running the statecounteditor, please read the README for more information.\n"
+        
         # Read the state file if we can, quit if we cannot
         try:
             state_file = open(self.state_file_name, "r")
