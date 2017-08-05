@@ -7,11 +7,7 @@ provider "aws" {
 }
 
 variable "test_tags" {
-  default = [ "ebs2", "ebs3" ]
-}
-
-variable "another_tags" {
-  default = [ "ebs1", "ebs2", "ebs4", "ebs5", "ebs6" ]
+  default = [ "ebs1", "ebs2", "ebs3" ]
 }
 
 resource "aws_ebs_volume" "test" {
@@ -22,6 +18,10 @@ resource "aws_ebs_volume" "test" {
   tags {
       Name = "${var.test_tags[count.index]}"
   }
+}
+
+variable "another_tags" {
+  default = [ "ebs1", "ebs2", "ebs3", "ebs4", "ebs5", "ebs6" ]
 }
 
 resource "aws_ebs_volume" "another" {
