@@ -10,7 +10,8 @@ Clone the repo to a folder and open the files.
 # Explaining Terraform count problem
 If you take a look at the example count.tf terraform, you'll see the following definition:
 
-```variable "test_tags" {
+```
+variable "test_tags" {
   default = [ "ebs1", "ebs2", "ebs3" ]
 }
 
@@ -27,7 +28,8 @@ resource "aws_ebs_volume" "test" {
 
 This will create three EBS volumes with the name tags ebs1, ebs2, and ebs3 and is a very cool feature in terraform.  This allows you to easily create some automation scripts to build a lot of resources.  In the terraform state file, they will be listed as "aws_ebs_volume.test.0", "aws_ebs_volume.test.1", "aws_ebs_volume.test.2".  The issue is that if in the future you decide that you no longer need ebs2.  For clarity, here is the current mapping in our example:
 
-```Volume to state resource
+```
+Volume to state resource
 ebs1 = "aws_ebs_volume.test.0"
 ebs2 = "aws_ebs_volume.test.1"
 ebs3 = "aws_ebs_volume.test.2"
@@ -35,7 +37,8 @@ ebs3 = "aws_ebs_volume.test.2"
 
 If you remove ebs2 from the array, then ebs3 will shift into ebs2's place in the array.  This will cause terraform to see the following when you run terraform plan:
 
-```Volume to state resource
+```
+Volume to state resource
 ebs1 = "aws_ebs_volume.test.0"
 ebs3 = "aws_ebs_volume.test.1" (rename ebs2 tag to ebs3)
 nothing = "aws_ebs_volume.test.2" (delete ebs3)
@@ -43,7 +46,8 @@ nothing = "aws_ebs_volume.test.2" (delete ebs3)
 
 Here's the actual terraform plan for this:
 
-```~ aws_ebs_volume.test.1
+```
+~ aws_ebs_volume.test.1
     tags.Name: "ebs2" => "ebs3"
 
 - aws_ebs_volume.test.2
