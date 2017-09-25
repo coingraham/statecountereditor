@@ -63,6 +63,7 @@ So I've created a python script that will introspect the state file and find all
 
 # Author
 Coin Graham
+https://github.com/coingraham/statecountereditor
 
 
 

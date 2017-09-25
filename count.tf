@@ -3,7 +3,6 @@
 provider "aws" {
   region              = "us-east-1"
   profile             = "firstwatch"
-  allowed_account_ids = ["955241386426"]
 }
 
 variable "test_tags" {
