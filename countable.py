@@ -11,6 +11,7 @@ class Countable:
         self.max = 0
 
     def push(self, number):
+        number = int(number)
         if number > self.max:
             self.max = number
 
